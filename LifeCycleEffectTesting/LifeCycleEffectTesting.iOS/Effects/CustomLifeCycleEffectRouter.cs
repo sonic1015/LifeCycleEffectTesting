@@ -10,6 +10,7 @@ using LifeCycleEffectTesting.iOS.Effects;
 
 [assembly: ResolutionGroupName("LifeCycleEffectTesting")]
 [assembly: ExportEffect(typeof(CustomLifeCycleEffectRouter), nameof(CustomLifeCycleEffect))]
+//[assembly: ExportEffect(typeof(XctVariantLifeCycleEffectRouter), nameof(CustomLifeCycleEffect))]
 
 namespace LifeCycleEffectTesting.iOS.Effects
 {
@@ -44,6 +45,39 @@ namespace LifeCycleEffectTesting.iOS.Effects
                 _viewLifecycleEffect?.RaiseLoadedEvent(Element);
             else if (!nsObservedChange.OldValue?.Equals(NSNull.Null) ?? false)
                 _viewLifecycleEffect?.RaiseUnloadedEvent(Element);
+        }
+    }
+
+    public class XctVariantLifeCycleEffectRouter : PlatformEffect
+    {
+        private CustomLifeCycleEffect _lifeCycleEffect;
+
+        protected override void OnAttached()
+        {
+            _lifeCycleEffect = Element.Effects.OfType<CustomLifeCycleEffect>().FirstOrDefault() ?? throw new ArgumentNullException($"The effect {nameof(CustomLifeCycleEffect)} can't be null.");
+
+            Element.PropertyChanged += OnPropertyChanged;
+        }
+
+        void OnPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Renderer" && _lifeCycleEffect != null)
+            {
+                var result = Platform.GetRenderer((VisualElement)Element);
+
+                if (result != null)
+                    _lifeCycleEffect.RaiseLoadedEvent(Element);
+                else
+                {
+                    _lifeCycleEffect.RaiseUnloadedEvent(Element);
+                    _lifeCycleEffect = null;
+                    Element.PropertyChanged -= OnPropertyChanged;
+                }
+            }
+        }
+
+        protected override void OnDetached()
+        {
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using LifeCycleEffectTesting.Models;
+﻿using LifeCycleEffectTesting.Extensions;
+using LifeCycleEffectTesting.Models;
 using LifeCycleEffectTesting.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,10 @@ namespace LifeCycleEffectTesting.Views
 
         public NewItemPage()
         {
+            this.InitializeConnectionToParent();
+
             InitializeComponent();
-            BindingContext = new NewItemViewModel();
+            
         }
     }
 }

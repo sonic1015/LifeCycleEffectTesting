@@ -14,6 +14,7 @@ namespace LifeCycleEffectTesting
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
+
             MainPage = new AppShell();
         }
 

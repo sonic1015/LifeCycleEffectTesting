@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LifeCycleEffectTesting.Extensions;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -18,6 +19,8 @@ namespace LifeCycleEffectTesting.Views
 
         public ItemsPage()
         {
+            this.InitializeConnectionToParent();
+
             InitializeComponent();
 
             BindingContext = _viewModel = new ItemsViewModel();

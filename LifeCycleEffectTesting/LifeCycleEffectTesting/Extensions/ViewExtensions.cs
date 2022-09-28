@@ -13,9 +13,10 @@ public static class ViewExtensions
     {
         var elementName = element.GetType().Name;
 
-        if (element is Page page)
+        if (element is Page)
         {
             Debug.WriteLine($"{elementName} is already a page.");
+            return;
         }
 
         var customLifeCycleEffect = new CustomLifeCycleEffect();
@@ -27,7 +28,9 @@ public static class ViewExtensions
 
             if (element.Parent == null)
             {
-                throw new NullReferenceException($"{elementName} does not have a parent ???.");
+                //throw new NullReferenceException($"{elementName} does not have a parent ???.");
+                Debug.WriteLine($"{elementName} does not have a parent ???.");
+                return;
             }
 
             var current = element.Parent;
@@ -37,7 +40,11 @@ public static class ViewExtensions
                 current = current.Parent;
 
                 if (current == null)
-                    throw new NullReferenceException($"How can {elementName} be loaded and not have a parent in hierarchy ???.");
+                {
+                    //throw new NullReferenceException($"How can {elementName} be loaded and not have a parent in hierarchy ???.");
+                    Debug.WriteLine($"How can {elementName} be loaded and not have a parent in hierarchy ???.");
+                    return;
+                }
             }
 
             var pageName = element.GetType().Name;

@@ -1,4 +1,5 @@
-﻿using LifeCycleEffectTesting.ViewModels;
+﻿using LifeCycleEffectTesting.Extensions;
+using LifeCycleEffectTesting.ViewModels;
 using LifeCycleEffectTesting.Views;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,10 @@ namespace LifeCycleEffectTesting
     {
         public AppShell()
         {
+            this.InitializeConnectionToParent();
+
             InitializeComponent();
+
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
         }
